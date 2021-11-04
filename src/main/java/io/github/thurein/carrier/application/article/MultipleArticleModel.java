@@ -1,0 +1,23 @@
+package io.github.thurein.carrier.application.article;
+
+import io.github.thurein.carrier.application.article.ArticleModel.ArticleModelNested;
+import io.github.thurein.carrier.domain.article.Article;
+import lombok.Value;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
+@Value
+class MultipleArticleModel {
+
+    List<ArticleModelNested> articles;
+    int articlesCount;
+
+    static MultipleArticleModel fromArticles(Page<Article> articles) {
+        final var articlesCollected = articles.map(ArticleModelNested::fromArticle)
+                .stream().collect(toList());
+        return new MultipleArticleModel(articlesCollected, articlesCollected.size());
+    }
+}
